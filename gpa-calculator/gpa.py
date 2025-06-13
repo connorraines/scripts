@@ -71,7 +71,26 @@ def calculate_gpa(grade, type):
             return 0.0
     else:
         raise ValueError("Invalid grade type")
-while True:
+
+# Read the grades.csv file if it exists
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
+grades_file = os.path.join(script_dir, 'grades.csv')
+import csv
+if os.path.exists(grades_file):
+    print("Reading Grades...")
+    with open(grades_file, mode='r') as file:
+        reader = csv.reader(file)
+        next(reader, None)  # Skip header row
+        for row in reader:
+            if len(row) == 2:
+                grade, gradeType = row  
+                gpa.append(calculate_gpa(float(grade), gradeType))
+# If the file does not exist, prompt the user for grades
+else:
+    print("No previous grades found. Please enter your grades.")
+    # Loop to get grades from the user
+    while True:
         gradeType = input("Enter the type of the next grade (Regular/Honors/AP)(Type anything else to stop): ").strip()
         #exit loop if user types anthing other than Regular, Honors, or AP
         if gradeType not in ["Regular", "Honors", "AP"]:
